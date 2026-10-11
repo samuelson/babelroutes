@@ -1,0 +1,35 @@
+name: Build
+
+on:
+  push:
+    branches: [main, master]
+    tags: ["v*"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build apk
+        run: chmod +x build-apk.sh && ./build-apk.sh
+
+      - name: Upload apk
+        uses: actions/upload-artifact@v4
+        with:
+          name: babelroutes-apk
+          path: build/babelroutes-*.apk
+          if-no-files-found: error
+
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/babelroutes-*.apk
+          generate_release_notes: true
