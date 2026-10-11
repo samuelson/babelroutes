@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # Build an unsigned noarch .apk using Docker (Alpine 3.23 / apk-tools 3).
 # Host build-depends: docker
 set -euo pipefail
